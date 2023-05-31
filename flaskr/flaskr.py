@@ -1,21 +1,30 @@
 # all the imports
-from flask import Flask, request, session, redirect, url_for, \
-     abort, render_template, flash, current_app, g
-import psycopg2, psycopg2.extras
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request, render_template
+import requests
+
+# my module import
+from morpheme_analyzer import MorphemeAnalyzer
 
 # create our little application :)
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jimin:eodid9978$@localhost:5432/jimin'
 
-db = SQLAlchemy(app)
+
+app = Flask(__name__)
 
 @app.route('/')
 def index():
-    if db.session.connection():
-        return 'DB connection SUCCEED!!! :)'
-    else:
-        return 'DB connection failed... :('
+    return render_template('index.html')
+
+@app.route('/result', methods=['POST'])
+def result():
+    # POST 요청으로 전달된 데이터 가져오기
+    data = request.form.get('data')
+
+    analyzer = MorphemeAnalyzer();
+    morpheme_list = analyzer.analyze(data);
+
+
+    return render_template('result.html', result=morpheme_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
