@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html>
 <head>
-    <script src="wordcloud.js"></script>
     <title>Result</title>
 </head>
-
 <body>
     <h1>Result</h1>
+    
+    <h2>Top 20 Words:</h2>
     <ul>
-        {% for item in result %}
-        <li>{{ item[0] }}: {{ item[1] }}</li>
+        {% for word, score in result %}
+            <li>{{ word }}: {{ score }}</li>
         {% endfor %}
     </ul>
-</body>
 
+    <h2>WordCloud:</h2>
+    <img src="{{ wordcloud_image }}" alt="WordCloud">
+
+</body>
 </html>

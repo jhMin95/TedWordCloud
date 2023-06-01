@@ -1,6 +1,7 @@
 # all the imports
 from flask import Flask, request, render_template
 import requests
+from wordcloud import WordCloud
 
 # my module import
 from crawlted import extract_text_from_url
@@ -56,8 +57,14 @@ def result():
 
     # 정렬된 dictionary 의 상위 20개 추출한 딕셔너리 반환
     result_list = list(tfidf_result.items())[:20]
+ # WordCloud 생성 및 저장
+    wordcloud = WordCloud(font_path='/goinfre/jimin/TedWordCloud/flaskr/static/D2Coding.ttf', background_color='white')
+    wordcloud.generate_from_frequencies(tfidf_result)
+    wordcloud_image_path = '/goinfre/jimin/TedWordCloud/flaskr/static/wordcloud.png'  # WordCloud 이미지 저장 경로
+    wordcloud.to_file(wordcloud_image_path)
 
-    return render_template("result.html", result=result_list)
+    return render_template('result.html', result=result_list, wordcloud_image=wordcloud_image_path)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
