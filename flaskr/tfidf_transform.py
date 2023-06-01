@@ -22,7 +22,6 @@ class TfidfAnalyzer:
 
         try:
             # TF-IDF 행렬로 변환
-            print(document)
             tfidf_matrix = self.vectorizer.transform([document])
         except Exception as e:
             raise Exception(f"An error occurred while transforming the document: {e}")

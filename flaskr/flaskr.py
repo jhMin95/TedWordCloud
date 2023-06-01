@@ -11,10 +11,6 @@ from tfidf_transform import TfidfAnalyzer
 # create our little application :)
 app = Flask(__name__)
 
-
-app = Flask(__name__)
-
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -47,25 +43,21 @@ def result():
     # 텍스트 분석
     analyzer = MorphemeAnalyzer()
     script_str = analyzer.analyze(sentence_list)
-    print(script_str)
-    if result is None:
+    if script_str is None:
         return render_template("error.html", erorr="형태소 분석 중 에러 발생"), 500
 
     # tf-idf 분석
     try:
         tfidf_analyzer = TfidfAnalyzer()
-        tfidf_analyzer.load_vectorizer("tfidf_vectorizer.joblib")
+        tfidf_analyzer.load_vectorizer("tfidf_vectorizer.pkl")
         tfidf_result = tfidf_analyzer.analyze_document(script_str)
     except Exception as e:
         return render_template("error.html", error=f"tf-idf 분석 중 에러 발생: {e}"), 500
 
-    print(tfidf_result)
     # 정렬된 dictionary 의 상위 20개 추출한 딕셔너리 반환
     result_list = list(tfidf_result.items())[:20]
 
-    print(result_list)
     return render_template("result.html", result=result_list)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
