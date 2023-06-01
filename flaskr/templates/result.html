@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <script src="wordcloud.js"></script>
     <title>Result</title>
 </head>
+
 <body>
     <h1>Result</h1>
-    <div id="wordcloud">Result: {{ result }}</div>
+    <ul>
+        {% for item in result_list %}
+        <li>{{ item[0] }}: {{ item[1] }}</li>
+        {% endfor %}
+    </ul>
 </body>
+
 </html>

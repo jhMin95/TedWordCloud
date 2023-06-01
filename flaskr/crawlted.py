@@ -3,37 +3,34 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 
-import time
+def extract_text_from_url(url):
+    try:
+        # Chrome 옵션 생성
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # headless 모드로 설정
 
-# 웹 드라이버 인스턴스 생성
-# Chrome 옵션 생성
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # headless 모드로 설정
+        # Chrome WebDriver 생성
+        driver = webdriver.Chrome(options=chrome_options)
 
-# Chrome WebDriver 생성
-driver = webdriver.Chrome(options=chrome_options)
+        # 웹 드라이버로 해당 URL 열기
+        driver.get(url)
 
-# TED 톡 URL 설정
-tedtalk_url = "https://www.ted.com/talks/david_biello_the_year_without_summer/transcript?language=ko"
+        # 텍스트 추출할 요소의 XPath 설정
+        element_xpath = (
+            "//span[@class='inline cursor-pointer hover:bg-red-300 css-82uonn']"
+        )
 
-# 웹 드라이버로 해당 URL 열기
-driver.get(tedtalk_url)
+        # 요소 찾기
+        elements = driver.find_elements(By.XPATH, element_xpath)
 
-# 텍스트 추출할 요소의 XPath 설정
-element_xpath = "//span[@class='inline cursor-pointer hover:bg-red-300 css-82uonn']"
+        # 텍스트 추출
+        text_list = [element.text for element in elements]
 
-# 요소 찾기
-elements = driver.find_elements(By.XPATH, element_xpath)
+        # 웹 드라이버 종료
+        driver.quit()
 
+        return text_list
 
-# 텍스트 추출
-text_list = [element.text for element in elements]
-
-print (text_list)
-
-
-# 웹 드라이버 종료
-driver.quit()
-
-
-
+    except Exception as e:
+        print("오류가 발생했습니다:", str(e))
+        return None
